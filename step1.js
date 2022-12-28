@@ -6,7 +6,7 @@ const cat = (path) => {
             console.log(`ERROR reading ${path}: \n`, err);
             process.exit(1)
         }
-        console.log("DATA...", data);
+        console.log(data);
     })
 }
 
