@@ -10,11 +10,6 @@ const cat = (path) => {
     })
 }
 
-const argv = process.argv;
-
-for (let [i, arg] of argv.entries()) {
-    // console.log(i, arg);
-    if (i === 2) {
-        cat(arg)
-    }
+if (process.argv[2]) {
+    cat(process.argv[2]);
 }
