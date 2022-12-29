@@ -8,17 +8,17 @@ const cat = (path, out) => {
             console.log(`ERROR reading ${path}: \n`, err);
             process.exit(1)
         }
-        console.log("CAT data:", data)
+        handleOutput(data, out);
     })
 }
 
-const webCat = (url) => {
+const webCat = (url, out) => {
     axios.get(url)
     .then(function(response){
-        respond([response.data])
+        handleOutput(response.data, out);
     })
     .catch(function (error) {
-        respond([`ERROR fetching ${url}:`, error.message])
+        console.log(`ERROR fetching ${url}:`, error.message);
     })
 }
 
@@ -27,20 +27,32 @@ const respond = (data) => {
     console.log(d);
 }
 
+const handleOutput = (data, out) => {
+    if (out) {
+        fs.writeFile(out, data, (err) => {
+            if (err) throw err;
+        })
+    } else {
+        console.log(data)
+    }
+}
+
 let path;
 let out;
 
 if (process.argv[2] === "--out") {
     path = process.argv[4];
     out = process.argv[3];
-    console.log("OUT path:", path)
-    console.log("OUT out:", out)
-    cat(path, out);
+    if (/http/.test(path)) {
+        webCat(path, out);
+    } else {
+        cat(path, out);
+    }
 } else {
     path = process.argv[2];
-}
-if (/http/.test(path)) {
-    webCat(path);
-} else {
-    cat(path)
+    if (/http/.test(path)) {
+        webCat(path);
+    } else {
+        cat(path)
+    }
 }
