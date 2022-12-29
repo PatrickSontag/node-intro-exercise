@@ -12,8 +12,12 @@ const cat = (path) => {
 }
 
 const webCat = (url) => {
-    axios.get(url).then(function(response){
+    axios.get(url)
+    .then(function(response){
         console.log(response.data);
+    })
+    .catch(function (error) {
+        console.log(`ERROR fetching ${url}: \n`, error.message);
     })
 }
 
